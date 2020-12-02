@@ -1,0 +1,27 @@
+<section class="cards admin">
+
+  {% for recipe in recipes %}
+
+    <div class="card">
+
+      <div class="recipe" id="{{recipe.id}}">
+
+        <img src="{{files[0].src}}" alt="" class="recipe-image">
+
+        <div>
+
+          <h4 class="recipe-title">{{recipe.title}}</h4>
+
+          <h5 class="recipe-author">por {{recipe.chef_name}}</h5>
+
+          <a href="/admin/recipes/{{recipe.id}}" class="link">Visualizar</a>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  {% endfor %}
+
+</section>

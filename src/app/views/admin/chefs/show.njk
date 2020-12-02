@@ -1,0 +1,53 @@
+{% extends "admin/layout.njk" %}
+
+{% block head %}
+  <title>Admin Foodfy - Chef: {{chef.name}}</title>
+{% endblock head %}
+
+{% block content %}
+
+  <section>
+
+    <div class="head__section">
+      <div>
+        <h2>Chef: {{chef.name}}</h2>
+      </div>
+      <div>
+        <a href="/admin/chefs/{{chef.id}}/edit" class="btn btn-primary">Editar Chef</a>
+      </div>
+    </div>
+
+    <div id="chef">
+
+      <div>
+        {% if not file[0] %}
+          <img src="http://placehold.it/500x500?text=CHEF SEM FOTO" alt="">
+        {% else  %}
+          <img src="{{file[0].src}}" alt="{{file[0].name}}">
+        {% endif %}
+
+        <h4>{{chef.name}}</h4>
+        {% if chef.total_recipes == 0 %}
+          <h5>Nenhuma receita cadastrada</h5>
+        {% elif chef.total_recipes == 1 %}
+          <h5>{{chef.total_recipes}} receita </h5>
+        {% elif chef.total_recipes > 1 %}
+          <h5>{{chef.total_recipes}} receitas </h5>
+        {% endif %}
+
+      </div>
+
+      <div>
+        {% if recipes %}
+          <h2>Receitas</h2>
+          {% include "pages/admin/recipes/cards.njk" %}
+        {% elif not recipes %}
+          <a href="/admin/recipes/create" class="btn btn-primary">Cadastrar primeira receita</a>
+        {% endif %}
+      </div>
+
+    </div>
+
+  </section>
+
+{% endblock content %}

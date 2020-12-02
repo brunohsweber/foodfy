@@ -1,0 +1,29 @@
+<script>
+
+  const formDelete = document.querySelector("#form-delete");
+
+  formDelete.addEventListener("submit", function (event) {
+
+    {% if chef %}
+      {% if chef.total_recipes > 0 %}
+        event.preventDefault();
+        alert("ATENÇÃO!\nChefs com receitas cadastradas não podem ser deletados!");
+      {% elif chef.total_recipes == 0 %}
+        const confirmation = confirm("Deseja deletar?");
+
+        if (!confirmation) {
+          event.preventDefault();
+        }
+      {% endif %}
+    {% endif %}
+
+    {% if recipe %}
+      const confirmation = confirm("Deseja deletar?");
+
+      if (!confirmation) {
+        event.preventDefault();
+      }
+    {% endif %}
+
+  });
+</script>

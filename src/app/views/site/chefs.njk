@@ -1,0 +1,31 @@
+{% extends "site/layout.njk" %}
+
+{% block content %}
+
+  <section class="chefs">
+
+    {% if error %}
+      <div class="not-found">{{error}}</div>
+    {% endif %}
+
+    {% for chef in chefs %}
+      <div class="chef">
+        <div style="background: url({{ chef.avatar_url }}) no-repeat center center / cover"></div>
+        <div>
+          <h3>{{chef.name}}</h3>
+          <p>
+            {% if chef.total_recipes == 0 %}
+              Nenhuma receita
+              {% elif chef.total_recipes == 1 %}
+              {{chef.total_recipes}} receita
+              {% elif chef.total_recipes > 1 %}
+              {{chef.total_recipes}} receitas
+              {% endif %}
+          </p>
+        </div>
+      </div>
+    {% endfor %}
+
+  </section>
+
+{% endblock content %}

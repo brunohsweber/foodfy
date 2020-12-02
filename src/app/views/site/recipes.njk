@@ -1,0 +1,30 @@
+{% extends "site/layout.njk" %}
+
+{% block head %}
+
+  <title>
+    Foodfy - Receitas
+  </title>
+
+{% endblock head %}
+
+{% block content %}
+
+  {% if filter %}
+    <div class="search-results">
+      <h2>Buscando por "{{filter}}"</h2>
+    </div>
+  {% endif %}
+
+  {% if error %}
+    <div id="not-found">{{error}}</div>
+  {% endif %}
+
+  {% include "site/recipes-cards.njk" %}
+
+  <div class="pagination"
+    data-page={{pagination.page}}
+    data-total={{pagination.total}}
+    data-filter={{filter}}></div>
+
+{% endblock content %}

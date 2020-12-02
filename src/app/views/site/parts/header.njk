@@ -1,0 +1,23 @@
+<header>
+
+  <div>
+
+    <a href="/" class="menu-logo"><img src="/others/logo_black.png" alt="Logo Foodfy"></a>
+
+    <nav class="menu-links">
+      <a href="/about" class="menu-link">Sobre</a>
+      <a href="/recipes" class="menu-link">Receitas</a>
+      <a href="/chefs" class="menu-link">Chefs</a>
+    </nav>
+
+    {% if recipes %}
+      <form action="/recipes" method="GET" class="search">
+        <input type="text" name="filter" id="" placeholder="Buscar uma receita"
+                  value="{{filter}}">
+        <button type="submit" class="btn btn-primary">Buscar</button>
+      </form>
+    {% endif %}
+
+  </div>
+
+</header>

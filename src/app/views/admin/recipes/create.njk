@@ -1,0 +1,29 @@
+{% extends "admin/layout.njk" %}
+
+{% block head %}
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" >
+  <title>Admin Foodfy - Criar nova receita</title>
+{% endblock head %}
+
+{% block content %}
+
+  <section>
+
+    <div class="head__section">
+      <div>
+        <h2>Criando nova receita</h2>
+      </div>
+      <div>
+        <button type="submit" form="form" class="btn btn-primary">Salvar</button>
+      </div>
+    </div>
+
+    <form id="form" action="/admin/recipes" method="POST" enctype="multipart/form-data" >
+      {% include "admin/recipes/fields.njk" %}
+    </form>
+
+  </section>
+
+  {% include "admin/scripts/addIngredientAndPreparatation.njk" %}
+
+{% endblock content %}

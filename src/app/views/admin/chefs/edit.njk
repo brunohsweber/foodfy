@@ -1,0 +1,46 @@
+{% extends "admin/layout.njk" %}
+
+{% block head %}
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" >
+  <title>Admin Foodfy - Editar Chef {{chef.name}}</title>
+{% endblock head %}
+
+{% block content %}
+
+  <section>
+
+    <div class="head__section">
+      <div>
+        <h2>Editando chef</h2>
+      </div>
+      <div>
+        <button type="submit" class="btn btn-warning" form="form-delete">Deletar</button>
+        <button type="submit" class="btn btn-primary" form="form">Salvar</button>
+      </div>
+    </div>
+
+    <form id="form" action="/admin/chefs?_method=PUT" method="POST" enctype="multipart/form-data">
+
+      {% include "admin/pages/chefs/fields.njk" %}
+
+      <input 
+        type="hidden" 
+        name="id" 
+        value={{ chef.id }}>
+
+    </form>
+
+    <form id="form-delete" action="/admin/chefs?_method=DELETE" method="POST">
+
+      <input 
+        type="hidden" 
+        name="id" 
+        value={{ chef.id }}>
+
+    </form>
+
+  </section>
+
+  {% include "admin/parts/confirmFormDelete.njk" %}
+
+{% endblock content %}

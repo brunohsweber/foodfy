@@ -1,0 +1,19 @@
+<section class="chefs">
+
+  {% for chef in chefs %}
+    <div class="chef {{chef.id}}" >
+
+      {% if chef.avatar_src === null %}
+        <img src="http://placehold.it/500x500?text=CHEF SEM FOTO" alt="" class="avatar_chef">
+      {% else  %}
+        <img src="{{chef.avatar_src}}" alt="" class="avatar_chef">
+      {% endif %}
+
+      <div>
+        <h3>{{chef.name}}</h3>
+        <a href="/admin/chefs/{{chef.id}}" class="link">Visualizar</a>
+      </div>
+    </div>
+  {% endfor %}
+
+</section>

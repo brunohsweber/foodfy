@@ -1,0 +1,27 @@
+{% extends "admin/layout.njk" %}
+
+{% block head %}
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" >
+  <title>Admin Foodfy - Criar novo chef</title>
+{% endblock head %}
+
+{% block content %}
+
+  <section>
+
+    <div class="head__section">
+      <div>
+        <h2>Criando novo chef</h2>
+      </div>
+      <div>
+        <button type="submit" form="form" class="btn btn-primary">Salvar</button>
+      </div>
+    </div>
+
+    <form id="form" action="/admin/chefs" method="POST" enctype="multipart/form-data" >
+      {% include "admin/chefs/fields.njk" %}
+    </form>
+
+  </section>
+
+{% endblock content %}

@@ -1,0 +1,27 @@
+{% extends "admin/layout.njk" %}
+
+{% block head %}
+  <title>Admin Foodfy - Chefs</title>
+{% endblock head %}
+
+{% block content %}
+
+  <section>
+
+    <div class="head__section">
+      <div>
+        <a href="/admin/chefs/create" class="btn btn-primary">Novo Chef</a>
+        <h2>Gerenciar chefs</h2>
+      </div>
+    </div>
+
+    {% include "admin/chefs/cards.njk" %}
+
+  </section>
+
+  <div class="pagination"
+    data-page={{pagination.page}}
+    data-total={{pagination.total}}
+    data-filter={{filter}}></div>
+
+{% endblock content %}

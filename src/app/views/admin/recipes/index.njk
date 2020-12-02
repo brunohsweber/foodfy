@@ -1,0 +1,27 @@
+{% extends "admin/layout.njk" %}
+
+{% block head %}
+  <title>Admin Foodfy -  Receitas</title>
+{% endblock head %}
+
+{% block content %}
+
+  <section>
+
+    <div class="head__section">
+      <div>
+        <a href="/admin/recipes/create" class="btn btn-primary">Nova receita</a>
+        <h2>Gerenciar receitas</h2>
+      </div>
+    </div>
+
+    {% include "admin/recipes/cards.njk" %}
+
+  </section>
+
+  <div class="pagination"
+    data-page={{pagination.page}}
+    data-total={{pagination.total}}
+    data-filter={{filter}}></div>
+
+{% endblock content %}

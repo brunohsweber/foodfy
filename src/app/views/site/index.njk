@@ -1,0 +1,30 @@
+{% extends "site/layout.njk" %}
+
+{% block head %}
+  <title>Foodfy</title>
+{% endblock head %}
+
+{% block content %}
+
+  <section id="hero">
+
+    <div>
+      <h1>As melhores receitas</h1>
+      <p>Aprenda a construir os melhores pratos com receitas criadas por profissionais do mundo inteiro.</p>
+    </div>
+
+    <div>
+      <img src="/others/chef.png" alt="">
+    </div>
+
+  </section>
+
+  <section id="recipes-highlights">
+
+    <h2>Mais Acessadas</h2>
+
+    {% include "site/recipes-cards.njk" %}
+
+  </section>
+
+{% endblock content %}

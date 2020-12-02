@@ -1,0 +1,31 @@
+<section id="cards">
+
+  {% for recipe in recipes %}
+
+    <div class="card" id="{{recipe.id}}">
+
+      <div style="background: url( {{recipe.image}} ) no-repeat center center / cover" alt="" class="recipe-image"></div>
+
+      <p class="recipe-title">{{recipe.title}}</p>
+
+      <p class="recipe-author">por {{recipe.chef_name}}</p>
+
+    </div>
+
+  {% endfor %}
+
+</section>
+
+<script>
+  const recipes = document.querySelectorAll(".cards .card .recipe");
+  for (recipe of recipes) {
+    const recipeId = recipe.getAttribute("id");
+    const image = recipe.querySelector(".recipe-image");
+    const title = recipe.querySelector(".recipe-title");
+    function openRecipe() {
+      window.location = `/recipes/${recipeId}`;
+    }
+    image.addEventListener("click", openRecipe);
+    title.addEventListener("click", openRecipe);
+  }
+</script>

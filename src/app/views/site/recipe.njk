@@ -1,0 +1,134 @@
+{% extends "site/layout.njk" %}
+
+{% block head %}
+
+  <title>
+    Foodfy - Receita de {{recipe.title}}
+  </title>
+
+{% endblock head %}
+
+{% block content %}
+
+  <section class="recipe recipe-details">
+
+    <div class="center">
+
+      <img src="{{recipe.image}}" alt="" class="recipe-image">
+
+      <h4>{{recipe.title}}</h4>
+
+      <h5>por {{recipe.chef_name}}</h5>
+
+    </div>
+
+    {% if recipe.ingredients %}
+
+      <div class="recipe-topic">
+
+        <div>
+
+          <h2>Ingredientes</h2>
+          <span class="selector">Esconder</span>
+
+        </div>
+
+        <div class="recipe-content show">
+
+          <ul>
+            {% for ingredient in recipe.ingredients %}
+              <li>{{ingredient}};</li>
+            {% endfor %}
+          </ul>
+
+        </div>
+
+      </div>
+
+    {% endif %}
+
+    {% if recipe.preparation %}
+
+      <div class="recipe-topic">
+
+        <div>
+
+          <h2>Modo de Preparo</h2>
+          <span class="selector">Mostrar</span>
+
+        </div>
+
+        <div class="recipe-content">
+
+          <ul>
+            {% for preparation in recipe.preparation %}
+              <li>{{preparation}}</li>
+            {% endfor %}
+          </ul>
+
+        </div>
+
+      </div>
+
+    {% endif %}
+
+    {% if recipe.information %}
+
+      <div class="recipe-topic">
+
+        <div>
+
+          <h2>Informações</h2>
+          <span class="selector">Mostrar</span>
+
+        </div>
+
+        <div class="recipe-content">
+
+          <p>
+            {{ recipe.information | striptags(true) | escape | nl2br }}
+          </p>
+
+        </div>
+
+      </div>
+
+    {% endif %}
+
+  </section>
+
+  <script>
+
+    const topics = document.querySelectorAll(".recipe-topic");
+
+    for (topic of topics) {
+      let selector = topic.querySelector(".selector");
+      let content = topic.querySelector(".recipe-content");
+
+      if (!content.classList.contains("show")) {
+        content.style.display = "none";
+        selector.innerText = "MOSTRAR";
+      } else if (selector.classList.contains("show")) {
+        content.style.display = "grid";
+        selector.innerText = "ESCONDER";
+      }
+
+      selector.onclick = function () {
+        if (!content.classList.contains("show")) {
+          content.style.display = "grid";
+          content
+            .classList
+            .add("show");
+          selector.innerText = "ESCONDER";
+        } else if (content.classList.contains("show")) {
+          content.style.display = "none";
+          content
+            .classList
+            .remove("show");
+          selector.innerText = "MOSTRAR";
+        }
+      };
+    }
+  </script>
+
+{% endblock content %}
