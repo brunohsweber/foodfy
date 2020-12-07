@@ -14,7 +14,6 @@ routes.get("/recipes/:index", ClientController.recipe);
 routes.get("/chefs", ClientController.chefs);
 
 // **** ADMIN **** //
-// Redirect
 routes.get("/admin", (req, res) => res.redirect(`/admin/recipes`));
 
 // **** ADMIN => Recipes **** //
@@ -36,6 +35,19 @@ routes.put("/admin/chefs", multer.array("photos", 1), ChefController.put);
 routes.delete("/admin/chefs", ChefController.delete);
 
 // **** NOT-FOUND **** //
-routes.use((req, res) => res.status(404).send("Page Not Found!"));
+
+routes.use("/admin/chefs", (req, res) =>
+  res.status(404).send("Chefs Page Not Found!")
+);
+
+routes.use("/admin/recipes", (req, res) =>
+  res.status(404).send("Recipes Page Not Found!")
+);
+
+routes.use("/admin", (req, res) =>
+  res.status(404).send("Admin Page Not Found!")
+);
+
+routes.use("/", (req, res) => res.status(404).send("Page Not Found!"));
 
 module.exports = routes;

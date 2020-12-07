@@ -2,10 +2,9 @@ const db = require("../../config/db");
 const { date } = require("../lib/utils");
 
 module.exports = {
-  // CREATE
-
   create(data) {
-    const query = `
+    try {
+      const query = `
       INSERT INTO recipes (
         chef_id,
         title,
@@ -17,59 +16,65 @@ module.exports = {
       RETURNING id
     `;
 
-    const values = [
-      data.chef,
-      data.title,
-      data.ingredients,
-      data.preparation,
-      data.information,
-      date(Date.now()).iso,
-    ];
+      const values = [
+        data.chef,
+        data.title,
+        data.ingredients,
+        data.preparation,
+        data.information,
+        date(Date.now()).iso,
+      ];
 
-    return db.query(query, values);
+      return db.query(query, values);
+    } catch (err) {
+      throw new Error(`Database Error! => ${err}`);
+    }
   },
-
-  // READ
-  all(hightlights) {
-    if (hightlights) {
-      return db.query(`
-      SELECT recipes.*, 
-      chefs.name AS chef_name
-      FROM recipes
-      LEFT JOIN chefs ON (chefs.id = recipes.chef_id)
-      FETCH FIRST ${highlights} ROWS ONLY
-      `);
-    } else {
-      return db.query(`
-      SELECT recipes.*, 
-      chefs.name AS chef_name
-      FROM recipes
-      LEFT JOIN chefs ON (chefs.id = recipes.chef_id)
-      ORDER BY recipes.title ASC
-      `);
+  getAll(highlights) {
+    try {
+      if (highlights) {
+        return db.query(`
+        SELECT recipes.*, 
+        chefs.name AS chef_name
+        FROM recipes
+        LEFT JOIN chefs ON (chefs.id = recipes.chef_id)
+        FETCH FIRST ${highlights} ROWS ONLY
+        `);
+      } else {
+        return db.query(`
+        SELECT recipes.*, 
+        chefs.name AS chef_name
+        FROM recipes
+        LEFT JOIN chefs ON (chefs.id = recipes.chef_id)
+        ORDER BY recipes.title ASC
+        `);
+      }
+    } catch (err) {
+      throw new Error(`Database Error! => ${err}`);
     }
   },
   paginate(params) {
-    const { filter, limit, offset } = params;
+    try {
+      const { filter, limit, offset } = params;
 
-    let query = "",
-      filterQuery = "",
-      totalQuery = `
+      let query = "",
+        filterQuery = "",
+        totalQuery = `
         (SELECT count(*) FROM recipes) AS total
         `;
 
-    if (filter) {
-      filterQuery = `
+      if (filter) {
+        filterQuery = `
       WHERE (recipes.title ILIKE '%${filter}%')
       `;
 
-      totalQuery = `(
+        totalQuery = `(
         SELECT count(*) FROM recipes
         ${filterQuery}
       ) AS total`;
-    }
+      }
 
-    query = `
+      query = `
     SELECT recipes.*, 
     chefs.name AS chef_name,
     ${totalQuery}
@@ -80,22 +85,44 @@ module.exports = {
     LIMIT $1 OFFSET $2
     `;
 
-    return db.query(query, [limit, offset]);
+      return db.query(query, [limit, offset]);
+    } catch (err) {
+      throw new Error(`Database Error! => ${err}`);
+    }
   },
-  find(id) {
-    return db.query(
-      `
-    SELECT recipes.*,
-    chefs.name AS chef_name
-    FROM recipes
-    LEFT JOIN chefs ON (chefs.id = recipes.chef_id)
-    WHERE recipes.id= $1`,
-      [id]
-    );
+  findOne(recipeId) {
+    try {
+      return db.query(
+        `
+      SELECT recipes.*,
+      chefs.name AS chef_name
+      FROM recipes
+      LEFT JOIN chefs ON (chefs.id = recipes.chef_id)
+      WHERE recipes.id= $1`,
+        [recipeId]
+      );
+    } catch (err) {
+      throw new Error(`Database Error! => ${err}`);
+    }
   },
-  // UPDATE
+  getRecipesChef(chefId) {
+    try {
+      return db.query(
+        `
+      SELECT recipes.*,
+      chefs.name AS chef_name
+      FROM recipes
+      LEFT JOIN chefs ON (chefs.id = recipes.chef_id)
+      WHERE recipes.chef_id=$1`,
+        [chefId]
+      );
+    } catch (err) {
+      throw new Error(`Database Error! => ${err}`);
+    }
+  },
   update(data) {
-    const query = `
+    try {
+      const query = `
     UPDATE recipes
       
     SET
@@ -108,38 +135,25 @@ module.exports = {
 
     WHERE id = $6`;
 
-    const values = [
-      data.chef,
-      data.title,
-      data.ingredients,
-      data.preparation,
-      data.information,
-      data.id,
-    ];
+      const values = [
+        data.chef,
+        data.title,
+        data.ingredients,
+        data.preparation,
+        data.information,
+        data.id,
+      ];
 
-    return db.query(query, values);
+      return db.query(query, values);
+    } catch (err) {
+      throw new Error(`Database Error! => ${err}`);
+    }
   },
-  // DELETE
-  delete(id) {
-    return db.query(`DELETE FROM recipes WHERE id= $1`, [id]);
-  },
-
-  getImagesFiles(recipeId) {
-    return db.query(
-      `
-    SELECT 
-      files.id,
-      files.name, 
-      files.path
-
-    FROM files
-
-    LEFT JOIN recipes_files ON (files.id = recipes_files.file_id)
-    LEFT JOIN recipes ON (recipes.id = recipes_files.recipe_id)
-
-    WHERE recipes.id = ${recipeId}
-
-    `
-    );
+  delete(recipeId) {
+    try {
+      return db.query(`DELETE FROM recipes WHERE id= $1`, [recipeId]);
+    } catch (err) {
+      throw new Error(`Database Error! => ${err}`);
+    }
   },
 };

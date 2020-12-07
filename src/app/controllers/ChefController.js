@@ -1,17 +1,12 @@
 const Chef = require("../models/Chef");
+const Recipe = require("../models/Recipe");
 const File = require("../models/File");
 const { date } = require("../lib/utils");
-const { version } = require("../../../package.json");
-const currentYear = date(Date()).year;
-const paramsDefault = {
-  currentYear,
-  version,
-};
 
 module.exports = {
   async index(req, res) {
     try {
-      let results = await Chef.all();
+      let results = await Chef.getAll();
       const chefs = results.rows;
 
       if (!chefs) {
@@ -29,26 +24,30 @@ module.exports = {
 
       return res.render("admin/chefs/index", { chefs });
     } catch (err) {
-      throw `Database Error! => ${err}`;
+      throw new Error(err);
     }
   },
   create(req, res) {
-    return res.render("admin/chefs/create");
+    try {
+      return res.render("admin/chefs/create");
+    } catch (err) {
+      throw new Error(err);
+    }
   },
   async post(req, res) {
-    const keys = Object.keys(req.body);
-
-    for (key of keys) {
-      if (req.body[key] == "") {
-        return res.send("Please, fill all fields");
-      }
-    }
-
-    if (req.files.length == 0) {
-      return res.send("Please, send an image");
-    }
-
     try {
+      const keys = Object.keys(req.body);
+
+      for (key of keys) {
+        if (req.body[key] == "") {
+          return res.send("Please, fill all fields");
+        }
+      }
+
+      if (req.files.length == 0) {
+        return res.send("Please, send an image");
+      }
+
       let results = await File.create(req.files[0]);
       const fileId = results.rows[0].id;
 
@@ -57,33 +56,38 @@ module.exports = {
 
       return res.redirect(`/admin/chefs/${chefId}`);
     } catch (err) {
-      throw `Database Error! => ${err}`;
+      throw new Error(err);
     }
   },
   async show(req, res) {
     try {
       const chefId = req.params.id;
-      let results = await Chef.find(chefId);
+      let results = await Chef.findOne(chefId);
       const chef = results.rows[0];
 
       if (!chef) return res.send("Chef não encontrado!");
 
-      results = await Chef.files(chef.file_id);
+      results = await File.getAvatarChef(chef.file_id);
+      let file = results.rows[0];
 
-      const file = results.rows.map((file) => ({
+      file = {
         ...file,
-        src: `${req.protocol}://${req.headers.host}${file.path.replace(
-          "public",
-          ""
-        )}`,
-      }));
+        src: file.path,
+      };
 
-      results = await Chef.recipes(chefId);
+      file.src === null
+        ? file.src === null
+        : (file.src = `${req.protocol}://${req.headers.host}${file.src.replace(
+            "public",
+            ""
+          )}`);
+
+      results = await Recipe.getRecipesChef(chefId);
       const recipes = results.rows[0];
 
       return res.render("admin/chefs/show", { chef, file, recipes });
     } catch (err) {
-      throw `Database Error! => ${err}`;
+      throw new Error(err);
     }
   },
   async edit(req, res) {
@@ -105,19 +109,18 @@ module.exports = {
 
       return res.render("admin/chefs/edit", { chef, file });
     } catch (err) {
-      throw `Database Error! => ${err}`;
+      throw new Error(err);
     }
   },
   async put(req, res) {
-    const keys = Object.keys(req.body);
-
-    for (key of keys) {
-      if (req.body[key] == "" && key != "removed_files") {
-        return res.send("Por favor, preencha todos os campos!");
-      }
-    }
-
     try {
+      const keys = Object.keys(req.body);
+
+      for (key of keys) {
+        if (req.body[key] == "" && key != "removed_files") {
+          return res.send("Por favor, preencha todos os campos!");
+        }
+      }
       const chefId = req.body.id;
       let results = await Chef.find(chefId);
       const chef = results.rows[0];
@@ -135,7 +138,7 @@ module.exports = {
 
       return res.redirect(`/admin/chefs/${chefId}`);
     } catch (err) {
-      throw `Database Error! => ${err}`;
+      throw new Error(err);
     }
   },
   async delete(req, res) {
@@ -157,7 +160,7 @@ module.exports = {
 
       return res.redirect(`/admin/chefs`);
     } catch (err) {
-      throw `Database Error! => ${err}`;
+      throw new Error(err);
     }
   },
 };
