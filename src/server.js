@@ -4,6 +4,7 @@ const routes = require("./routes");
 const methodOverride = require("method-override");
 
 const server = express();
+const port = 5000;
 
 server.use(express.urlencoded({ extended: true }));
 server.use(express.static("public"));
@@ -19,6 +20,6 @@ nunjucks.configure("src/app/views", {
   watch: true,
 });
 
-server.listen(5000, function () {
-  console.log("server is running...");
+server.listen(port, function () {
+  console.log(`Server listening at http://localhost:${port}`);
 });

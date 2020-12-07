@@ -22,9 +22,53 @@ module.exports = {
 
       return db.query(query, values);
     } catch (err) {
-      console.error(`Database Error => ${error}`);
+      throw new Error(`Database Error! => ${err}`);
     }
   },
+  async delete(fileId) {
+    try {
+      const result = await db.query(`SELECT * FROM files WHERE id = $1`, [
+        fileId,
+      ]);
+      const file = result.rows[0];
+
+      fs.unlinkSync(file.path);
+
+      return db.query(`DELETE FROM files WHERE id=$1`, [id]);
+    } catch (err) {
+      throw new Error(`Database Error! => ${err}`);
+    }
+  },
+  getImagesRecipe(recipeId) {
+    try {
+      return db.query(
+        `
+      SELECT 
+        files.id,
+        files.name, 
+        files.path
+  
+      FROM files
+  
+      LEFT JOIN recipes_files ON (files.id = recipes_files.file_id)
+      LEFT JOIN recipes ON (recipes.id = recipes_files.recipe_id)
+  
+      WHERE recipes.id = ${recipeId}
+  
+      `
+      );
+    } catch (err) {
+      throw new Error(`Database Error! => ${err}`);
+    }
+  },
+  getAvatarChef(fileId) {
+    try {
+      return db.query(` SELECT * from files WHERE id = $1 `, [fileId]);
+    } catch (err) {
+      throw new Error(`Database Error! => ${err}`);
+    }
+  },
+  // Função abaixo não utilizada
   async createRecipeFiles({ filename, path, recipe_id }) {
     try {
       let query = `
@@ -61,20 +105,8 @@ module.exports = {
       values = [recipe_id, fileId];
 
       return db.query(query, values);
-    } catch (error) {
-      console.log(`Database Error => ${error}`);
-    }
-  },
-  async delete(id) {
-    try {
-      const result = await db.query(`SELECT * FROM files WHERE id = $1`, [id]);
-      const file = result.rows[0];
-
-      fs.unlinkSync(file.path);
-
-      return db.query(`DELETE FROM files WHERE id=$1`, [id]);
     } catch (err) {
-      console.error(`Database Error => ${error}`);
+      throw new Error(`Database Error! => ${err}`);
     }
   },
 };

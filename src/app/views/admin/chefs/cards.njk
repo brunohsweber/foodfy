@@ -1,7 +1,7 @@
 <section class="chefs">
 
   {% for chef in chefs %}
-    <div class="chef {{chef.id}}" >
+    <div class="chef" id="{{chef.id}}">
 
       {% if chef.avatar_src === null %}
         <img src="http://placehold.it/500x500?text=CHEF SEM FOTO" alt="" class="avatar_chef">
